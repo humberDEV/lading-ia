@@ -3,86 +3,163 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Crea webs con IA | Humberto</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crea webs con IA y cobra por ellas</title>
     <meta name="description"
-        content="Aprende a ganar dinero creando webs con Inteligencia Artificial. Curso paso a paso.">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+        content="Aprende a crear páginas web con IA y véndelas a clientes. Desde 0, sin programar.">
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
-    <div class="app-container">
 
-        <!-- Profile Header completely removed as it does not contribute to email capture -->
+    <main>
 
-        <!-- Main Hook -->
-        <main class="content fade-in-up">
-            <div class="hook-box">
-                <span class="tag">⚡️ NUEVO MÉTODO</span>
-                <h1 class="main-title">
-                    Aprende a crear webs que <span class="highlight">la gente paga.</span>
-                </h1>
-                <p class="subtitle">
-                    Usando Inteligencia Artificial.<br>
-                    <strong>Sin programar. Solo tu PC + WiFi.</strong>
-                </p>
-            </div>
+        <!-- ═══════════════════════════════════
+         HERO BLOCK
+    ═══════════════════════════════════ -->
+        <section class="hero">
+            <div class="badge">⚡ NUEVO MÉTODO</div>
 
-            <!-- Value Props -->
-            <ul class="benefits-list fade-in-up delay-1">
-                <li>
-                    <div class="icon">✅</div>
-                    <span>Crea tu primera web en menos de 1 hora</span>
-                </li>
-                <li>
-                    <div class="icon">✅</div>
-                    <span>Sin saber programar nada</span>
-                </li>
-                <li>
-                    <div class="icon">✅</div>
-                    <span>Cobra tu primer cliente antes de acabar el curso</span>
-                </li>
+            <h1>
+                Crea webs con IA<br>
+                y empieza a cobrar<br>
+                por ellas <span class="yellow">(desde 0)</span>
+            </h1>
+
+            <p class="subtitle">
+                Sin programar. Sin experiencia.<br>
+                <span class="muted">El sistema para generar ingresos con webs simples que negocios sí pagan.</span>
+            </p>
+        </section>
+
+        <!-- ═══════════════════════════════════
+         PRECIO + URGENCIA
+    ═══════════════════════════════════ -->
+        <section class="pricing">
+            <p class="price-was">Precio normal: <s>49$</s></p>
+            <div class="discount-pill">🔥 Te ahorras 29$ · 59% de descuento</div>
+            <div class="price-big yellow">20$</div>
+            <p class="urgency">⚠️ Estoy subiendo el precio en los próximos días</p>
+        </section>
+
+        <!-- ═══════════════════════════════════
+         CTA BLOCK
+    ═══════════════════════════════════ -->
+        <section class="cta-block">
+            <p class="pre-cta">
+                Esto no es para aprender teoría.<br>
+                Es para poder ofrecer algo y cobrar por ello.
+            </p>
+
+            <a href="https://api.whatsapp.com/send/?phone=34744609840&text=Hola%21+Vi+el+curso+y+quiero+el+acceso+al+precio+de+lanzamiento+%F0%9F%9A%80&type=phone_number&app_absent=0"
+                class="cta-btn" id="mainCta">
+                💸 Empezar ahora por 20$
+            </a>
+
+            <ul class="trust-list">
+                <li>⚡ Acceso inmediato tras el pago</li>
+                <li>❌ Sin suscripciones</li>
+                <li>💸 Con 1 cliente ya recuperas el curso</li>
             </ul>
+        </section>
 
-            <div class="pricing-info fade-in-up delay-1" style="text-align: center; margin: 2rem 0;">
-                <p style="font-size: 1rem; color: #64748b; margin-bottom: 0px; font-weight: 500;">Precio regular: <s>40$</s></p>
-                <p style="font-size: 3.5rem; font-weight: 900; color: #10b981; line-height: 1; margin: 5px 0;">20$</p>
-                <p style="font-size: 0.95rem; color: #ef4444; font-weight: 800; margin-top: 5px;">🔥 Solo para los primeros 20 alumnos</p>
-            </div>
+        <!-- ═══════════════════════════════════
+         TEMARIO (Acordeón para curiosos)
+    ═══════════════════════════════════ -->
+        <section class="accordion-section">
+            <button class="accordion-toggle" id="toggleModules">
+                📚 Ver temario completo del curso
+                <span class="arrow">▼</span>
+            </button>
 
-            <!-- CTA Section -->
-            <div class="cta-wrapper fade-in-up delay-2">
-                <a href="https://wa.me/34744609840?text=Hola%21%20Vi%20el%20curso%20y%20quiero%20el%20acceso%20al%20precio%20de%20lanzamiento%20%F0%9F%9A%80" target="_blank" rel="noopener" class="btn-pulse" style="text-decoration: none; display: flex; justify-content: center; align-items: center; width: 100%;">
-                    <span class="btn-text">💬 QUIERO EL CURSO</span>
-                    <span class="btn-shine"></span>
-                </a>
+            <div class="accordion-body" id="modulesBody">
+                <div class="module">
+                    <span class="mod-tag">01</span>
+                    <div>
+                        <strong>Instalación y herramientas</strong>
+                        <p>Todo lo que necesitas para empezar, con acceso directo a los recursos.</p>
+                    </div>
+                </div>
+                <div class="module">
+                    <span class="mod-tag">02</span>
+                    <div>
+                        <strong>Requisitos del cliente</strong>
+                        <p>Cómo leer al cliente y darle a la IA exactamente lo que necesita.</p>
+                    </div>
+                </div>
+                <div class="module">
+                    <span class="mod-tag">03</span>
+                    <div>
+                        <strong>Crear tu primera web</strong>
+                        <p>Terminarás este módulo con una landing lista en un solo prompt.</p>
+                    </div>
+                </div>
+                <div class="module">
+                    <span class="mod-tag">04</span>
+                    <div>
+                        <strong>Cobrar por tu trabajo</strong>
+                        <p>Transforma una web básica en un servicio que puedas vender.</p>
+                    </div>
+                </div>
+                <div class="module">
+                    <span class="mod-tag">05</span>
+                    <div>
+                        <strong>Entrega al cliente</strong>
+                        <p>Del código en tu ordenador a un enlace profesional listo para entregar.</p>
+                    </div>
+                </div>
+                <div class="module locked">
+                    <span class="mod-tag">🔒</span>
+                    <div>
+                        <strong>Próximamente</strong>
+                        <p>Módulos extra bloqueados temporalmente. Gratis si entras hoy.</p>
+                    </div>
+                </div>
+
             </div>
-        </main>
+        </section>
+
+        <!-- TESTIMONIO COMPLETO (anchor desde arriba) -->
+        <section class="testimonial" id="testimonio">
+            <div class="stars">⭐⭐⭐⭐⭐</div>
+            <p>
+                "Ya vendí mi primera web por 200$.<br>
+                El curso cuesta 20$… sinceramente no entiendo cómo puede estar tan barato."
+            </p>
+            <span class="author">— <a href="https://instagram.com/marketingafikiados.juan" target="_blank"
+                    class="ig-link">@marketingafikiados.juan</a> 🇦🇷</span>
+        </section>
+
+    </main>
+
+    <!-- STICKY CTA (aparece al hacer scroll) -->
+    <div class="sticky-bar" id="stickyBar">
+        <a href="https://api.whatsapp.com/send/?phone=34744609840&text=Hola%21+Vi+el+curso+y+quiero+el+acceso+al+precio+de+lanzamiento+%F0%9F%9A%80&type=phone_number&app_absent=0"
+            class="cta-btn cta-sticky">
+            💸 Empezar por 20$
+        </a>
     </div>
 
-    <!-- Modal de Éxito -->
-    <div id="success-modal" class="modal-overlay" style="display:none;">
-        <div class="modal-card">
-            <div class="modal-emoji">🎉</div>
-            <h2 class="modal-title">¡Ya estás dentro!</h2>
-            <p class="modal-text">Te avisaremos por mail cuando llegue tu momento.<br><strong>Sígueme para no perderte nada.</strong></p>
-            <div class="social-btns">
-                <a href="https://www.tiktok.com/@humber.ia" target="_blank" rel="noopener" class="btn-tiktok" id="tiktok-btn">
-                    🎵 TikTok
-                </a>
-                <a href="https://www.instagram.com/humber.ia" target="_blank" rel="noopener" class="btn-instagram" id="instagram-btn">
-                    📸 Instagram
-                </a>
-            </div>
-            <button class="btn-close" id="close-modal">Ahora no</button>
-        </div>
-    </div>
+    <script>
+        // Accordion
+        const toggle = document.getElementById('toggleModules');
+        const body = document.getElementById('modulesBody');
+        toggle.addEventListener('click', () => {
+            toggle.classList.toggle('open');
+            body.style.maxHeight = body.style.maxHeight ? null : body.scrollHeight + 'px';
+        });
 
-    <script type="module" src="script.js"></script>
+        // Sticky CTA: aparece cuando el botón principal sale de la pantalla
+        const mainCta = document.getElementById('mainCta');
+        const stickyBar = document.getElementById('stickyBar');
+        const observer = new IntersectionObserver(([entry]) => {
+            stickyBar.classList.toggle('visible', !entry.isIntersecting && entry.boundingClientRect.top < 0);
+        }, { threshold: 0 });
+        observer.observe(mainCta);
+    </script>
+
 </body>
 
 </html>
