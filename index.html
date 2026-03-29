@@ -5,160 +5,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crea webs con IA y cobra por ellas</title>
-    <meta name="description"
-        content="Aprende a crear páginas web con IA y véndelas a clientes. Desde 0, sin programar.">
+    <meta name="description" content="Sin programar. Sin experiencia. Solo un portátil y conexión.">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Inter:wght@400;500&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Inter:ital,wght@0,400;0,500;0,600;1,400&display=swap"
         rel="stylesheet">
 </head>
 
 <body>
 
     <main>
-
-        <!-- ═══════════════════════════════════
-         HERO BLOCK
-    ═══════════════════════════════════ -->
         <section class="hero">
-            <div class="badge">⚡ NUEVO MÉTODO</div>
+            <h1>Crea webs con IA y empieza a cobrar por ellas</h1>
+            <p class="subtitle">Sin programar. Sin experiencia. Solo un portátil y conexión.</p>
 
-            <h1>
-                Crea webs con IA<br>
-                y empieza a cobrar<br>
-                por ellas <span class="yellow">(desde 0)</span>
-            </h1>
+            <div class="creator-profile" title="Pon tu foto reemplazando la imagen">
+                <!-- Nota: añade tu foto en la carpeta del proyecto y cambia 'foto-humber.jpg' por el nombre real de ella -->
+                <img src="foto-humber.jpg" alt="Humber" class="creator-avatar" onerror="this.src='https://ui-avatars.com/api/?name=Humber&background=2A2A3E&color=fff'">
+                <span class="creator-info"><strong>Humber</strong> &middot; Programador con 4 años de experiencia</span>
+            </div>
 
-            <p class="subtitle">
-                Sin programar. Sin experiencia.<br>
-                <span class="muted">El sistema para generar ingresos con webs simples que negocios sí pagan.</span>
-            </p>
-        </section>
-
-        <!-- ═══════════════════════════════════
-         PRECIO + URGENCIA
-    ═══════════════════════════════════ -->
-        <section class="pricing">
-            <p class="price-was">Precio normal: <s>49$</s></p>
-            <div class="discount-pill">🔥 Te ahorras 29$ · 59% de descuento</div>
-            <div class="price-big yellow">20$</div>
-            <p class="urgency">⚠️ Estoy subiendo el precio en los próximos días</p>
-        </section>
-
-        <!-- ═══════════════════════════════════
-         CTA BLOCK
-    ═══════════════════════════════════ -->
-        <section class="cta-block">
-            <p class="pre-cta">
-                Esto no es para aprender teoría.<br>
-                Es para poder ofrecer algo y cobrar por ello.
-            </p>
-
-            <a href="https://api.whatsapp.com/send/?phone=34744609840&text=Hola%2C+he+decidido+apuntarme+al+curso+con+el+precio+de+lanzamiento.&type=phone_number&app_absent=0"
-                class="cta-btn" id="mainCta">
-                Empezar ahora por 20$
-            </a>
-
-            <ul class="trust-list">
-                <li>⚡ Acceso inmediato tras el pago</li>
-                <li>❌ Sin suscripciones</li>
-                <li>💸 Con 1 cliente ya recuperas el curso</li>
-            </ul>
-        </section>
-
-        <!-- ═══════════════════════════════════
-         TEMARIO (Acordeón para curiosos)
-    ═══════════════════════════════════ -->
-        <section class="accordion-section">
-            <button class="accordion-toggle" id="toggleModules">
-                📚 Ver temario completo del curso
-                <span class="arrow">▼</span>
-            </button>
-
-            <div class="accordion-body" id="modulesBody">
-                <div class="module">
-                    <span class="mod-tag">01</span>
-                    <div>
-                        <strong>Instalación y herramientas</strong>
-                        <p>Todo lo que necesitas para empezar, con acceso directo a los recursos.</p>
-                    </div>
-                </div>
-                <div class="module">
-                    <span class="mod-tag">02</span>
-                    <div>
-                        <strong>Requisitos del cliente</strong>
-                        <p>Cómo leer al cliente y darle a la IA exactamente lo que necesita.</p>
-                    </div>
-                </div>
-                <div class="module">
-                    <span class="mod-tag">03</span>
-                    <div>
-                        <strong>Crear tu primera web</strong>
-                        <p>Terminarás este módulo con una landing lista en un solo prompt.</p>
-                    </div>
-                </div>
-                <div class="module">
-                    <span class="mod-tag">04</span>
-                    <div>
-                        <strong>Cobrar por tu trabajo</strong>
-                        <p>Transforma una web básica en un servicio que puedas vender.</p>
-                    </div>
-                </div>
-                <div class="module">
-                    <span class="mod-tag">05</span>
-                    <div>
-                        <strong>Entrega al cliente</strong>
-                        <p>Del código en tu ordenador a un enlace profesional listo para entregar.</p>
-                    </div>
-                </div>
-                <div class="module locked">
-                    <span class="mod-tag">🔒</span>
-                    <div>
-                        <strong>Próximamente</strong>
-                        <p>Módulos extra bloqueados temporalmente. Gratis si entras hoy.</p>
-                    </div>
-                </div>
-
+            <div class="hero-cta">
+                <a href="https://buy.stripe.com/9B69ATd4I3gLgAlfPvao803" class="btn-primary" id="mainCta">
+                    Empezar ahora
+                </a>
+                <p class="price-tag">30$ &mdash; acceso inmediato + soporte cuando lo necesites los primeros 7 días para
+                    no perderte</p>
             </div>
         </section>
 
-        <!-- TESTIMONIO COMPLETO (anchor desde arriba) -->
-        <section class="testimonial" id="testimonio">
-            <div class="stars">⭐⭐⭐⭐⭐</div>
-            <p>
-                "Ya vendí mi primera web por 200$.<br>
-                El curso cuesta 20$… sinceramente no entiendo cómo puede estar tan barato."
-            </p>
-            <span class="author">— <a href="https://instagram.com/marketingafikiados.juan" target="_blank"
-                    class="ig-link">@marketingafikiados.juan</a> 🇦🇷</span>
+        <section class="content-section" id="courseContent">
+            <h2>El sistema paso a paso</h2>
+            <div class="modules">
+                <div class="module">
+                    <h3>Instalación y herramientas</h3>
+                    <p>Preparamos el entorno moderno y gratuito para que puedas operar como un profesional sin necesidad
+                        de tocar código complejo.</p>
+                </div>
+                <div class="module">
+                    <h3>Qué pedir al cliente</h3>
+                    <p>Las preguntas exactas que debes hacer para alinear sus expectativas con lo que la inteligencia
+                        artificial puede generar rápidamente.</p>
+                </div>
+                <div class="module">
+                    <h3>Crear webs con IA</h3>
+                    <p>Construcción en tiempo real. Generamos la base entera de la página web mediante instrucciones
+                        claras y estructuradas.</p>
+                </div>
+                <div class="module">
+                    <h3>Mejorarlas nivel pro</h3>
+                    <p>Ajustes de diseño, estilos y funcionalidades avanzadas que diferencian una web básica de un
+                        producto por el cual los negocios pagan.</p>
+                </div>
+                <div class="module">
+                    <h3>Subirlas y entregarlas</h3>
+                    <p>El salto final. Del entorno local al dominio del cliente, entregándole el control de forma
+                        impecable y sin fricción.</p>
+                </div>
+            </div>
+
+            <div class="testimonial" style="margin-top: 64px;">
+                <p>"Que locura, está buenísimo. Ya estoy haciendo mi primera web para un cliente."</p>
+                <div class="author">Aquiles</div>
+            </div>
+
+            <div class="hero-cta" style="margin-bottom: 0;">
+                <a href="https://buy.stripe.com/9B69ATd4I3gLgAlfPvao803" class="btn-primary">
+                    Empezar ahora
+                </a>
+                <p class="price-tag">solo 30$ &mdash; acceso inmediato + soporte cuando lo necesites los primeros 7 días
+                    para
+                    no perderte</p>
+            </div>
         </section>
-
     </main>
-
-    <!-- STICKY CTA (aparece al hacer scroll) -->
-    <div class="sticky-bar" id="stickyBar">
-        <a href="https://api.whatsapp.com/send/?phone=34744609840&text=Hola%2C+he+decidido+apuntarme+al+curso+con+el+precio+de+lanzamiento.&type=phone_number&app_absent=0"
-            class="cta-btn cta-sticky">
-            Empezar por 20$
-        </a>
-    </div>
-
-    <script>
-        // Accordion
-        const toggle = document.getElementById('toggleModules');
-        const body = document.getElementById('modulesBody');
-        toggle.addEventListener('click', () => {
-            toggle.classList.toggle('open');
-            body.style.maxHeight = body.style.maxHeight ? null : body.scrollHeight + 'px';
-        });
-
-        // Sticky CTA: aparece cuando el botón principal sale de la pantalla
-        const mainCta = document.getElementById('mainCta');
-        const stickyBar = document.getElementById('stickyBar');
-        const observer = new IntersectionObserver(([entry]) => {
-            stickyBar.classList.toggle('visible', !entry.isIntersecting && entry.boundingClientRect.top < 0);
-        }, { threshold: 0 });
-        observer.observe(mainCta);
-    </script>
 
 </body>
 
