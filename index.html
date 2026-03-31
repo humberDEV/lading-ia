@@ -1,1492 +1,1690 @@
 <!DOCTYPE html>
 
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crea webs con IA y cobra por ellas — Humberto</title>
-<meta name="description" content="Aprende a crear páginas web profesionales con inteligencia artificial y cobra por ellas. Sin saber programar, sin experiencia previa. Método probado.">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --bg: #0b0b0f;
-  --surface: #12121a;
-  --surface-hover: #181822;
-  --border: #1e1e2a;
-  --border-hover: #2a2a38;
-  --accent: #c8d93a;
-  --accent-soft: #a8b830;
-  --accent2: #e8944a;
-  --text: #e8e8ec;
-  --text-secondary: #c0c0c8;
-  --muted: #7a7a88;
-  --font-display: 'Syne', sans-serif;
-  --font-body: 'DM Sans', sans-serif;
-}
-
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 1.6;
-  overflow-x: hidden;
-}
-
-/* NOISE OVERLAY */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 999;
-  opacity: 0.3;
-}
-
-/* SCROLL REVEAL */
-.reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.reveal-delay-1 { transition-delay: 0.08s; }
-.reveal-delay-2 { transition-delay: 0.16s; }
-.reveal-delay-3 { transition-delay: 0.24s; }
-.reveal-delay-4 { transition-delay: 0.32s; }
-.reveal-delay-5 { transition-delay: 0.40s; }
-.reveal-delay-6 { transition-delay: 0.48s; }
-
-/* NAV */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  padding: 16px 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(11,11,15,0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  transition: padding 0.3s ease, background 0.3s ease;
-}
-
-nav.scrolled {
-  padding: 12px 24px;
-  background: rgba(11,11,15,0.92);
-  border-bottom-color: var(--border-hover);
-}
-
-.nav-logo {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 18px;
-  letter-spacing: -0.5px;
-  color: var(--text);
-}
-
-.nav-logo span { color: var(--muted); }
-
-.nav-cta {
-  background: var(--text);
-  color: var(--bg);
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 13px;
-  padding: 10px 22px;
-  border-radius: 100px;
-  text-decoration: none;
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
-  letter-spacing: 0.3px;
-}
-
-.nav-cta:hover { 
-  transform: scale(1.04); 
-  opacity: 0.9;
-}
-
-/* HERO */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 120px 24px 80px;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-glow {
-  position: absolute;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(200,217,58,0.04) 0%, transparent 65%);
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  animation: glowPulse 8s ease-in-out infinite;
-}
-
-.hero-glow-2 {
-  position: absolute;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(232,148,74,0.03) 0%, transparent 65%);
-  top: 65%;
-  left: 25%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  animation: glowPulse 10s ease-in-out infinite reverse;
-}
-
-@keyframes glowPulse {
-  0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  50% { opacity: 0.5; transform: translate(-50%, -50%) scale(1.1); }
-}
-
-/* FLOATING PARTICLES */
-.particles {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.particle {
-  position: absolute;
-  width: 2px;
-  height: 2px;
-  background: var(--muted);
-  border-radius: 50%;
-  opacity: 0;
-  animation: floatParticle linear infinite;
-}
-
-@keyframes floatParticle {
-  0% { opacity: 0; transform: translateY(100vh) scale(0); }
-  10% { opacity: 0.35; }
-  90% { opacity: 0.15; }
-  100% { opacity: 0; transform: translateY(-20vh) scale(1); }
-}
-
-.hero-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(200,217,58,0.04);
-  border: 1px solid rgba(200,217,58,0.1);
-  color: var(--accent);
-  font-size: 12px;
-  font-weight: 500;
-  padding: 7px 16px;
-  border-radius: 100px;
-  margin-bottom: 28px;
-  width: fit-content;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-.hero-tag::before {
-  content: '';
-  width: 5px; height: 5px;
-  background: var(--accent);
-  border-radius: 50%;
-  animation: pulse 2.5s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.3; transform: scale(0.7); }
-}
-
-h1 {
-  font-family: var(--font-display);
-  font-size: clamp(42px, 10vw, 76px);
-  font-weight: 800;
-  line-height: 1.0;
-  letter-spacing: -2px;
-  margin-bottom: 24px;
-  max-width: 700px;
-  color: var(--text);
-}
-
-h1 em {
-  font-style: normal;
-  color: var(--text-secondary);
-  position: relative;
-}
-
-h1 em::after {
-  content: '';
-  position: absolute;
-  bottom: 4px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--accent-soft), transparent);
-  border-radius: 2px;
-  opacity: 0.4;
-}
-
-.hero-sub {
-  font-size: 18px;
-  color: var(--muted);
-  max-width: 480px;
-  margin-bottom: 40px;
-  font-weight: 300;
-  line-height: 1.7;
-}
-
-.hero-sub strong { color: var(--text-secondary); font-weight: 500; }
-
-.hero-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-bottom: 56px;
-}
-
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  background: var(--text);
-  color: var(--bg);
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 16px;
-  padding: 18px 36px;
-  border-radius: 14px;
-  text-decoration: none;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
-  width: fit-content;
-  letter-spacing: -0.3px;
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 36px rgba(232,232,236,0.12);
-}
-
-.btn-price {
-  font-size: 13px;
-  color: var(--muted);
-  font-weight: 400;
-}
-
-.btn-price s { color: #444; }
-.btn-price strong { color: var(--text-secondary); font-weight: 500; }
-
-/* STATS BAR */
-.stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  overflow: hidden;
-  max-width: 480px;
-}
-
-.stat {
-  background: var(--surface);
-  padding: 20px 16px;
-  text-align: center;
-  transition: background 0.3s ease;
-}
-
-.stat:hover {
-  background: var(--surface-hover);
-}
-
-.stat-number {
-  font-family: var(--font-display);
-  font-size: 26px;
-  font-weight: 800;
-  color: var(--text);
-  letter-spacing: -1px;
-  line-height: 1;
-  margin-bottom: 4px;
-}
-
-.stat-label {
-  font-size: 11px;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* SECTION */
-section { padding: 80px 24px; }
-
-.section-tag {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--muted);
-  margin-bottom: 16px;
-  font-weight: 500;
-}
-
-h2 {
-  font-family: var(--font-display);
-  font-size: clamp(28px, 6vw, 42px);
-  font-weight: 800;
-  letter-spacing: -1.5px;
-  line-height: 1.1;
-  margin-bottom: 40px;
-  color: var(--text);
-}
-
-h2 span { color: var(--text-secondary); }
-
-/* SHOWCASE / WEB EXAMPLES */
-.showcase {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-top: 8px;
-}
-
-.showcase-item {
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  transition: border-color 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
-}
-
-.showcase-item:hover {
-  border-color: var(--border-hover);
-  transform: translateY(-4px);
-  box-shadow: 0 16px 48px rgba(0,0,0,0.35);
-}
-
-.showcase-item img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.showcase-caption {
-  padding: 14px 18px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  border-top: 1px solid var(--border);
-}
-
-.showcase-caption-text {
-  font-size: 13px;
-  color: var(--muted);
-  font-weight: 400;
-}
-
-.showcase-caption-text strong {
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-.showcase-caption-tag {
-  font-size: 10px;
-  padding: 3px 10px;
-  border-radius: 100px;
-  background: rgba(200,217,58,0.06);
-  color: var(--accent-soft);
-  border: 1px solid rgba(200,217,58,0.1);
-  white-space: nowrap;
-  flex-shrink: 0;
-  font-weight: 500;
-}
-
-/* PROOF / TESTIMONIAL */
-.proof {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 28px;
-  margin-bottom: 16px;
-  position: relative;
-  transition: border-color 0.3s ease, transform 0.3s ease;
-}
-
-.proof:hover {
-  border-color: var(--border-hover);
-  transform: translateY(-2px);
-}
-
-.proof::before {
-  content: '\201C';
-  font-family: var(--font-display);
-  font-size: 72px;
-  color: var(--muted);
-  opacity: 0.12;
-  position: absolute;
-  top: 10px;
-  left: 20px;
-  line-height: 1;
-}
-
-.proof-text {
-  font-size: 15px;
-  line-height: 1.7;
-  margin-bottom: 16px;
-  padding-top: 8px;
-  color: var(--text-secondary);
-}
-
-.proof-text strong { color: var(--text); font-weight: 500; }
-
-.proof-author {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.proof-avatar {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  background: var(--border-hover);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 13px;
-  color: var(--text);
-  flex-shrink: 0;
-}
-
-.proof-name {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 14px;
-  color: var(--text);
-}
-
-.proof-detail {
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.stars { color: var(--accent-soft); font-size: 12px; letter-spacing: 1px; }
-
-/* STEPS */
-.steps { display: flex; flex-direction: column; gap: 6px; }
-
-.step {
-  display: flex;
-  gap: 20px;
-  padding: 24px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
-  cursor: default;
-}
-
-.step:hover { 
-  border-color: var(--border-hover); 
-  background: var(--surface-hover);
-  transform: translateX(3px);
-}
-
-.step-num {
-  font-family: var(--font-display);
-  font-size: 12px;
-  font-weight: 800;
-  color: var(--muted);
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--border);
-  width: 36px; height: 36px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: color 0.3s ease, border-color 0.3s ease;
-}
-
-.step:hover .step-num {
-  color: var(--accent-soft);
-  border-color: rgba(200,217,58,0.15);
-}
-
-.step-title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 15px;
-  margin-bottom: 6px;
-  letter-spacing: -0.3px;
-  color: var(--text);
-}
-
-.step-desc {
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-/* MODULES */
-.modules { display: flex; flex-direction: column; gap: 4px; }
-
-.module {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 20px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  gap: 16px;
-  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
-  cursor: default;
-}
-
-.module:hover {
-  border-color: var(--border-hover);
-  background: var(--surface-hover);
-  transform: translateX(3px);
-}
-
-.module-left { display: flex; align-items: center; gap: 14px; }
-
-.module-num {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 12px;
-  color: var(--muted);
-  width: 24px;
-  flex-shrink: 0;
-  transition: color 0.3s ease;
-}
-
-.module:hover .module-num {
-  color: var(--text-secondary);
-}
-
-.module-title {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text);
-}
-
-.module-badge {
-  font-size: 10px;
-  padding: 3px 10px;
-  border-radius: 100px;
-  background: rgba(200,217,58,0.06);
-  color: var(--accent-soft);
-  border: 1px solid rgba(200,217,58,0.1);
-  white-space: nowrap;
-  flex-shrink: 0;
-  font-weight: 500;
-}
-
-/* FOR WHO */
-.forwho-grid { display: flex; flex-direction: column; gap: 10px; }
-
-.forwho-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 22px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
-}
-
-.forwho-item:hover {
-  border-color: var(--border-hover);
-  background: var(--surface-hover);
-  transform: translateY(-2px);
-}
-
-.forwho-icon {
-  font-size: 22px;
-  flex-shrink: 0;
-  margin-top: 2px;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.forwho-item:hover .forwho-icon {
-  transform: scale(1.1);
-}
-
-.forwho-title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 15px;
-  margin-bottom: 4px;
-  color: var(--text);
-}
-
-.forwho-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
-
-/* AUTHOR */
-.author-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 28px;
-  transition: border-color 0.3s ease;
-}
-
-.author-card:hover {
-  border-color: var(--border-hover);
-}
-
-.author-header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.author-img {
-  width: 60px; height: 60px;
-  border-radius: 50%;
-  background: var(--border-hover);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 22px;
-  color: var(--text);
-  flex-shrink: 0;
-  overflow: hidden;
-}
-
-.author-img img { width: 100%; height: 100%; object-fit: cover; }
-
-.author-name {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 20px;
-  letter-spacing: -0.5px;
-  color: var(--text);
-}
-
-.author-handle { font-size: 13px; color: var(--muted); }
-
-.author-bio { font-size: 14px; color: var(--muted); line-height: 1.7; }
-
-.author-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.author-stat {
-  background: rgba(255,255,255,0.02);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 14px 12px;
-  text-align: center;
-  transition: border-color 0.3s ease;
-}
-
-.author-stat:hover {
-  border-color: var(--border-hover);
-}
-
-.author-stat-n {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 18px;
-  color: var(--text);
-}
-
-.author-stat-l { font-size: 11px; color: var(--muted); }
-
-/* INCLUDES */
-.includes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-.include-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 16px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  transition: border-color 0.3s ease, transform 0.2s ease;
-}
-
-.include-item:hover {
-  border-color: var(--border-hover);
-  transform: translateY(-1px);
-}
-
-.include-item::before {
-  content: '✓';
-  color: var(--accent-soft);
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 13px;
-  flex-shrink: 0;
-}
-
-/* PRICING */
-.pricing-card {
-  background: var(--surface);
-  border: 1px solid var(--border-hover);
-  border-radius: 22px;
-  padding: 36px 28px;
-  position: relative;
-  overflow: hidden;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.pricing-card:hover {
-  box-shadow: 0 0 48px rgba(0,0,0,0.3);
-}
-
-.pricing-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--border-hover), var(--accent-soft), var(--border-hover));
-  background-size: 200% 100%;
-  animation: shimmerGradient 5s ease-in-out infinite;
-  opacity: 0.6;
-}
-
-@keyframes shimmerGradient {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.pricing-badge {
-  display: inline-block;
-  background: rgba(200,217,58,0.06);
-  border: 1px solid rgba(200,217,58,0.1);
-  color: var(--accent-soft);
-  font-size: 11px;
-  font-weight: 600;
-  padding: 5px 14px;
-  border-radius: 100px;
-  margin-bottom: 20px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.pricing-price {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-
-.price-main {
-  font-family: var(--font-display);
-  font-size: 60px;
-  font-weight: 800;
-  color: var(--text);
-  letter-spacing: -3px;
-  line-height: 1;
-}
-
-.price-old {
-  font-size: 20px;
-  color: #3a3a44;
-  text-decoration: line-through;
-  font-weight: 400;
-}
-
-.price-desc {
-  font-size: 13px;
-  color: var(--muted);
-  margin-bottom: 28px;
-  line-height: 1.5;
-}
-
-.pricing-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 28px;
-}
-
-.pricing-list li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
-.pricing-list li::before {
-  content: '→';
-  color: var(--muted);
-  font-weight: 700;
-  flex-shrink: 0;
-}
-
-.btn-buy {
-  display: block;
-  width: 100%;
-  text-align: center;
-  background: var(--text);
-  color: var(--bg);
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 16px;
-  padding: 20px;
-  border-radius: 14px;
-  text-decoration: none;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, opacity 0.3s ease;
-  letter-spacing: -0.3px;
-}
-
-.btn-buy:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(232,232,236,0.1);
-  opacity: 0.95;
-}
-
-.guarantee {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 16px;
-  padding: 14px;
-  background: rgba(255,255,255,0.02);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.guarantee-icon { font-size: 18px; flex-shrink: 0; }
-
-/* FAQ */
-.faq { display: flex; flex-direction: column; gap: 4px; }
-
-.faq-item {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  transition: border-color 0.3s ease;
-}
-
-.faq-item:hover {
-  border-color: var(--border-hover);
-}
-
-.faq-item.open {
-  border-color: var(--border-hover);
-}
-
-.faq-q {
-  width: 100%;
-  background: none;
-  border: none;
-  color: var(--text);
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 500;
-  padding: 18px 20px;
-  text-align: left;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  transition: color 0.2s ease;
-}
-
-.faq-q:hover {
-  color: var(--text-secondary);
-}
-
-.faq-q::after {
-  content: '+';
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 400;
-  color: var(--muted);
-  flex-shrink: 0;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease;
-}
-
-.faq-item.open .faq-q::after { 
-  transform: rotate(45deg); 
-  color: var(--text-secondary);
-}
-
-.faq-a {
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.7;
-  padding: 0 20px;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), padding 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.faq-item.open .faq-a {
-  max-height: 200px;
-  padding: 0 20px 18px;
-}
-
-/* FLOATING CTA */
-.floating-cta {
-  position: fixed;
-  bottom: -80px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 90;
-  background: rgba(18,18,26,0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border);
-  border-radius: 100px;
-  padding: 10px 12px 10px 20px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  transition: bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-  white-space: nowrap;
-}
-
-.floating-cta.show {
-  bottom: 24px;
-}
-
-.floating-cta-text {
-  font-size: 13px;
-  color: var(--muted);
-  font-weight: 400;
-}
-
-.floating-cta-text strong {
-  color: var(--text-secondary);
-  font-weight: 600;
-}
-
-.floating-cta-btn {
-  background: var(--text);
-  color: var(--bg);
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 12px;
-  padding: 10px 20px;
-  border-radius: 100px;
-  text-decoration: none;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-  flex-shrink: 0;
-}
-
-.floating-cta-btn:hover {
-  transform: scale(1.04);
-  opacity: 0.9;
-}
-
-/* FOOTER */
-footer {
-  padding: 40px 24px;
-  border-top: 1px solid var(--border);
-  text-align: center;
-}
-
-.footer-logo {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 20px;
-  margin-bottom: 8px;
-  color: var(--text);
-}
-
-.footer-logo span { color: var(--muted); }
-
-.footer-text { font-size: 12px; color: var(--muted); }
-
-/* ANIMATIONS */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.fade-up { animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-.delay-1 { animation-delay: 0.1s; opacity: 0; }
-.delay-2 { animation-delay: 0.2s; opacity: 0; }
-.delay-3 { animation-delay: 0.3s; opacity: 0; }
-.delay-4 { animation-delay: 0.4s; opacity: 0; }
-
-/* DIVIDER */
-.section-divider {
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border), transparent);
-  margin: 0;
-}
-
-/* RESPONSIVE */
-@media (max-width: 480px) {
-  .floating-cta-text { display: none; }
-  .floating-cta { padding: 8px; border-radius: 14px; }
-  .floating-cta-btn { border-radius: 10px; padding: 12px 24px; font-size: 13px; }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crea webs con IA y cobra por ellas — Humberto</title>
+    <meta name="description"
+        content="Aprende a crear páginas web profesionales con inteligencia artificial y cobra por ellas. Sin saber programar, sin experiencia previa. Método probado.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0b0b0f;
+            --surface: #12121a;
+            --surface-hover: #181822;
+            --border: #1e1e2a;
+            --border-hover: #2a2a38;
+            --accent: #c8d93a;
+            --accent-soft: #a8b830;
+            --accent2: #e8944a;
+            --text: #e8e8ec;
+            --text-secondary: #c0c0c8;
+            --muted: #7a7a88;
+            --font-display: 'Syne', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* NOISE OVERLAY */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.3;
+        }
+
+        /* SCROLL REVEAL */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 {
+            transition-delay: 0.08s;
+        }
+
+        .reveal-delay-2 {
+            transition-delay: 0.16s;
+        }
+
+        .reveal-delay-3 {
+            transition-delay: 0.24s;
+        }
+
+        .reveal-delay-4 {
+            transition-delay: 0.32s;
+        }
+
+        .reveal-delay-5 {
+            transition-delay: 0.40s;
+        }
+
+        .reveal-delay-6 {
+            transition-delay: 0.48s;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(11, 11, 15, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            transition: padding 0.3s ease, background 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 12px 24px;
+            background: rgba(11, 11, 15, 0.92);
+            border-bottom-color: var(--border-hover);
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 18px;
+            letter-spacing: -0.5px;
+            color: var(--text);
+        }
+
+        .nav-logo span {
+            color: var(--muted);
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: #0b0b0f;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 13px;
+            padding: 10px 22px;
+            border-radius: 100px;
+            text-decoration: none;
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
+            letter-spacing: 0.3px;
+        }
+
+        .nav-cta:hover {
+            transform: scale(1.04);
+            opacity: 0.9;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 120px 24px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(200, 217, 58, 0.04) 0%, transparent 65%);
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            animation: glowPulse 8s ease-in-out infinite;
+        }
+
+        .hero-glow-2 {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(232, 148, 74, 0.03) 0%, transparent 65%);
+            top: 65%;
+            left: 25%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            animation: glowPulse 10s ease-in-out infinite reverse;
+        }
+
+        @keyframes glowPulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+        }
+
+        /* FLOATING PARTICLES */
+        .particles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0;
+            animation: floatParticle linear infinite;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) scale(0);
+            }
+
+            10% {
+                opacity: var(--particle-opacity, 0.7);
+            }
+
+            90% {
+                opacity: calc(var(--particle-opacity, 0.7) * 0.4);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-20vh) scale(1);
+            }
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(200, 217, 58, 0.04);
+            border: 1px solid rgba(200, 217, 58, 0.1);
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 500;
+            padding: 7px 16px;
+            border-radius: 100px;
+            margin-bottom: 28px;
+            width: fit-content;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .hero-tag::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2.5s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.3;
+                transform: scale(0.7);
+            }
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-size: clamp(42px, 10vw, 76px);
+            font-weight: 800;
+            line-height: 1.0;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
+            max-width: 700px;
+            color: var(--text);
+        }
+
+        h1 em {
+            font-style: normal;
+            color: var(--text-secondary);
+            position: relative;
+        }
+
+        h1 em::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-soft), transparent);
+            border-radius: 2px;
+            opacity: 0.4;
+        }
+
+        .hero-sub {
+            font-size: 18px;
+            color: var(--muted);
+            max-width: 480px;
+            margin-bottom: 40px;
+            font-weight: 300;
+            line-height: 1.7;
+        }
+
+        .hero-sub strong {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 56px;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--accent);
+            color: #0b0b0f;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 16px;
+            padding: 18px 36px;
+            border-radius: 14px;
+            text-decoration: none;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+            width: fit-content;
+            letter-spacing: -0.3px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 36px rgba(200, 217, 58, 0.25);
+        }
+
+        .btn-price {
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 400;
+        }
+
+        .btn-price s {
+            color: #444;
+        }
+
+        .btn-price strong {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* STATS BAR */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            max-width: 480px;
+        }
+
+        .stat {
+            background: var(--surface);
+            padding: 20px 16px;
+            text-align: center;
+            transition: background 0.3s ease;
+        }
+
+        .stat:hover {
+            background: var(--surface-hover);
+        }
+
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text);
+            letter-spacing: -1px;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* SECTION */
+        section {
+            padding: 80px 24px;
+        }
+
+        .section-tag {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--muted);
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        h2 {
+            font-family: var(--font-display);
+            font-size: clamp(28px, 6vw, 42px);
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            margin-bottom: 40px;
+            color: var(--text);
+        }
+
+        h2 span {
+            color: var(--text-secondary);
+        }
+
+        /* SHOWCASE */
+        .showcase-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .showcase-img {
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .showcase-img img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .showcase-copy {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .showcase-copy-title {
+            font-family: var(--font-display);
+            font-size: clamp(20px, 3.5vw, 28px);
+            font-weight: 800;
+            letter-spacing: -0.8px;
+            line-height: 1.2;
+            color: var(--text);
+        }
+
+        .showcase-copy-title span { color: var(--text-secondary); }
+
+        .showcase-copy-desc {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .showcase-copy-points {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .showcase-copy-point {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .showcase-copy-point::before {
+            content: '→';
+            color: var(--accent-soft);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 600px) {
+            .showcase-split { grid-template-columns: 1fr; }
+        }
+
+        /* PROOF / TESTIMONIAL */
+        .proof {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 28px;
+            margin-bottom: 16px;
+            position: relative;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .proof:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+        }
+
+        .proof::before {
+            content: '\201C';
+            font-family: var(--font-display);
+            font-size: 72px;
+            color: var(--muted);
+            opacity: 0.12;
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            line-height: 1;
+        }
+
+        .proof-text {
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 16px;
+            padding-top: 8px;
+            color: var(--text-secondary);
+        }
+
+        .proof-text strong {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .proof-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .proof-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--border-hover);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 13px;
+            color: var(--text);
+            flex-shrink: 0;
+        }
+
+        .proof-name {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .proof-detail {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .stars {
+            color: var(--accent-soft);
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        /* STEPS */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .step {
+            display: flex;
+            gap: 20px;
+            padding: 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+            cursor: default;
+        }
+
+        .step:hover {
+            border-color: var(--border-hover);
+            background: var(--surface-hover);
+            transform: translateX(3px);
+        }
+
+        .step-num {
+            font-family: var(--font-display);
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--muted);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .step:hover .step-num {
+            color: var(--accent-soft);
+            border-color: rgba(200, 217, 58, 0.15);
+        }
+
+        .step-title {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+            color: var(--text);
+        }
+
+        .step-desc {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        /* MODULES */
+        .modules {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .module {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            gap: 16px;
+            transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+            cursor: default;
+        }
+
+        .module:hover {
+            border-color: var(--border-hover);
+            background: var(--surface-hover);
+            transform: translateX(3px);
+        }
+
+        .module-left {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .module-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .module-desc {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 4px;
+            line-height: 1.5;
+        }
+
+        .module-num {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 12px;
+            color: var(--muted);
+            width: 24px;
+            flex-shrink: 0;
+            transition: color 0.3s ease;
+        }
+
+        .module:hover .module-num {
+            color: var(--text-secondary);
+        }
+
+        .module-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .module-badge {
+            font-size: 10px;
+            padding: 3px 10px;
+            border-radius: 100px;
+            background: rgba(200, 217, 58, 0.06);
+            color: var(--accent-soft);
+            border: 1px solid rgba(200, 217, 58, 0.1);
+            white-space: nowrap;
+            flex-shrink: 0;
+            font-weight: 500;
+        }
+
+        /* FOR WHO */
+        .forwho-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .forwho-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+        }
+
+        .forwho-item:hover {
+            border-color: var(--border-hover);
+            background: var(--surface-hover);
+            transform: translateY(-2px);
+        }
+
+        .forwho-icon {
+            font-size: 22px;
+            flex-shrink: 0;
+            margin-top: 2px;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .forwho-item:hover .forwho-icon {
+            transform: scale(1.1);
+        }
+
+        .forwho-title {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 4px;
+            color: var(--text);
+        }
+
+        .forwho-desc {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        /* AUTHOR */
+        .author-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 28px;
+            transition: border-color 0.3s ease;
+        }
+
+        .author-card:hover {
+            border-color: var(--border-hover);
+        }
+
+        .author-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .author-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--border-hover);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 22px;
+            color: var(--text);
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .author-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .author-name {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 20px;
+            letter-spacing: -0.5px;
+            color: var(--text);
+        }
+
+        .author-handle {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .author-bio {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .author-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .author-stat {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 12px;
+            text-align: center;
+            transition: border-color 0.3s ease;
+        }
+
+        .author-stat:hover {
+            border-color: var(--border-hover);
+        }
+
+        .author-stat-n {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .author-stat-l {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        /* INCLUDES */
+        .includes-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .include-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: border-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .include-item:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-1px);
+        }
+
+        .include-item::before {
+            content: '✓';
+            color: var(--accent-soft);
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        /* PRICING */
+        .pricing-card {
+            background: var(--surface);
+            border: 1px solid var(--border-hover);
+            border-radius: 22px;
+            padding: 36px 28px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            box-shadow: 0 0 48px rgba(0, 0, 0, 0.3);
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--border-hover), var(--accent-soft), var(--border-hover));
+            background-size: 200% 100%;
+            animation: shimmerGradient 5s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes shimmerGradient {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .pricing-badge {
+            display: inline-block;
+            background: rgba(200, 217, 58, 0.06);
+            border: 1px solid rgba(200, 217, 58, 0.1);
+            color: var(--accent-soft);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 5px 14px;
+            border-radius: 100px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pricing-price {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .price-main {
+            font-family: var(--font-display);
+            font-size: 60px;
+            font-weight: 800;
+            color: var(--text);
+            letter-spacing: -3px;
+            line-height: 1;
+        }
+
+        .price-old {
+            font-size: 20px;
+            color: #3a3a44;
+            text-decoration: line-through;
+            font-weight: 400;
+        }
+
+        .price-desc {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        .pricing-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+
+        .pricing-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .pricing-list li::before {
+            content: '→';
+            color: var(--muted);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .btn-buy {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: var(--accent);
+            color: #0b0b0f;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 16px;
+            padding: 20px;
+            border-radius: 14px;
+            text-decoration: none;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, opacity 0.3s ease;
+            letter-spacing: -0.3px;
+        }
+
+        .btn-buy:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(200, 217, 58, 0.25);
+            opacity: 0.95;
+        }
+
+        .guarantee {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 16px;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .guarantee-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        /* FAQ */
+        .faq {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .faq-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--border-hover);
+        }
+
+        .faq-item.open {
+            border-color: var(--border-hover);
+        }
+
+        .faq-q {
+            width: 100%;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-family: var(--font-body);
+            font-size: 14px;
+            font-weight: 500;
+            padding: 18px 20px;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            transition: color 0.2s ease;
+        }
+
+        .faq-q:hover {
+            color: var(--text-secondary);
+        }
+
+        .faq-q::after {
+            content: '+';
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 400;
+            color: var(--muted);
+            flex-shrink: 0;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease;
+        }
+
+        .faq-item.open .faq-q::after {
+            transform: rotate(45deg);
+            color: var(--text-secondary);
+        }
+
+        .faq-a {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.7;
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), padding 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .faq-item.open .faq-a {
+            max-height: 200px;
+            padding: 0 20px 18px;
+        }
+
+        /* FLOATING CTA */
+        .floating-cta {
+            position: fixed;
+            bottom: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 90;
+            background: rgba(18, 18, 26, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 10px 12px 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            white-space: nowrap;
+        }
+
+        .floating-cta.show {
+            bottom: 24px;
+        }
+
+        .floating-cta-text {
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 400;
+        }
+
+        .floating-cta-text strong {
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .floating-cta-btn {
+            background: var(--accent);
+            color: #0b0b0f;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 12px;
+            padding: 10px 20px;
+            border-radius: 100px;
+            text-decoration: none;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .floating-cta-btn:hover {
+            transform: scale(1.04);
+            opacity: 0.9;
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 40px 24px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .footer-logo span {
+            color: var(--muted);
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-up {
+            animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .delay-1 {
+            animation-delay: 0.1s;
+            opacity: 0;
+        }
+
+        .delay-2 {
+            animation-delay: 0.2s;
+            opacity: 0;
+        }
+
+        .delay-3 {
+            animation-delay: 0.3s;
+            opacity: 0;
+        }
+
+        .delay-4 {
+            animation-delay: 0.4s;
+            opacity: 0;
+        }
+
+        /* DIVIDER */
+        .section-divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            margin: 0;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 480px) {
+            .floating-cta-text {
+                display: none;
+            }
+
+            .floating-cta {
+                padding: 8px;
+                border-radius: 14px;
+            }
+
+            .floating-cta-btn {
+                border-radius: 10px;
+                padding: 12px 24px;
+                font-size: 13px;
+            }
+        }
+    </style>
 
 </head>
+
 <body>
 
-<nav id="mainNav">
-  <div class="nav-logo">humber<span>.ia</span></div>
-  <a href="https://buy.stripe.com/9B69ATd4I3gLgAlfPvao803" class="nav-cta" id="navCta">Empezar — $30</a>
-</nav>
+    <nav id="mainNav">
+        <div class="nav-logo">humber<span>.ia</span></div>
+        <a href="https://buy.stripe.com/9B69ATd4I3gLgAlfPvao803" class="nav-cta" id="navCta">Empezar — $30</a>
+    </nav>
 
-<!-- HERO -->
+    <!-- HERO -->
 
-<div class="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-glow-2"></div>
-  <div class="particles" id="particles"></div>
-  <div class="hero-tag fade-up">Método probado · Resultados reales</div>
-  <h1 class="fade-up delay-1">Crea webs con IA y <em>cobra por ellas</em></h1>
-  <p class="hero-sub fade-up delay-2">
-    Sin saber programar. Sin experiencia previa.<br>
-    <strong>Solo un portátil, conexión y este método.</strong>
-  </p>
-  <div class="hero-actions fade-up delay-3">
-    <a href="https://buy.stripe.com/9B69ATd4I3gLgAlfPvao803" class="btn-primary" id="heroCta">
-      Acceder ahora →
-    </a>
-    <span class="btn-price"><s>97$</s> → <strong>30$ precio de fundador</strong> · Acceso inmediato</span>
-  </div>
-  <div class="stats fade-up delay-4">
-    <div class="stat">
-      <div class="stat-number" data-target="10" data-suffix="'">0</div>
-      <div class="stat-label">Por web</div>
+    <div class="hero">
+        <div class="hero-glow"></div>
+        <div class="hero-glow-2"></div>
+        <div class="particles" id="particles"></div>
+        <div class="hero-tag fade-up">IA + GitHub + Vercel · Paso a paso</div>
+        <h1 class="fade-up delay-1">Crea webs con IA y <em>cobra por ellas</em></h1>
+        <p class="hero-sub fade-up delay-2">
+            IA para generar, GitHub para guardar, Vercel para publicar.<br>
+            <strong>Una habilidad concreta que puedes ofrecer desde este finde.</strong>
+        </p>
+        <div class="hero-actions fade-up delay-3">
+            <a href="https://buy.stripe.com/9B69ATd4I3gLgAlfPvao803" class="btn-primary" id="heroCta">
+                Acceder ahora →
+            </a>
+            <span class="btn-price"><s>97$</s> → <strong>30$ precio de fundador</strong> · Acceso inmediato</span>
+        </div>
+        <div class="stats fade-up delay-4">
+            <div class="stat">
+                <div class="stat-number" data-target="10" data-suffix="'">0</div>
+                <div class="stat-label">Por web</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" style="-webkit-text-fill-color:inherit;font-size:22px;">~1h</div>
+                <div class="stat-label">De contenido total</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" data-target="200" data-suffix="€">0</div>
+                <div class="stat-label">Precio medio</div>
+            </div>
+        </div>
     </div>
-    <div class="stat">
-      <div class="stat-number" data-target="0" data-suffix="">0</div>
-      <div class="stat-label">Conocimientos</div>
+
+    <div class="section-divider"></div>
+
+    <!-- SHOWCASE -->
+
+    <section>
+        <div class="section-tag reveal">Ejemplo real</div>
+        <div class="showcase-split">
+            <div class="showcase-img reveal reveal-delay-1">
+                <img src="web2.png" alt="Web para clínica dental creada con IA" loading="lazy">
+            </div>
+            <div class="showcase-copy reveal reveal-delay-2">
+                <div class="showcase-copy-title">Esto lo hizo <span>una persona sin experiencia.</span> En 10 minutos.</div>
+                <p class="showcase-copy-desc">Una web completa, con secciones, textos y diseño profesional. Lista para entregar a un cliente real.</p>
+                <div class="showcase-copy-points">
+                    <div class="showcase-copy-point">Sin tocar código</div>
+                    <div class="showcase-copy-point">Con las herramientas del curso</div>
+                    <div class="showcase-copy-point">Lista para cobrar por ella</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- TESTIMONIAL -->
+
+    <section>
+        <div class="section-tag reveal">Lo que dicen</div>
+        <h2 class="reveal reveal-delay-1">Resultados <span>reales</span></h2>
+        <div class="proof reveal reveal-delay-2">
+            <p class="proof-text">
+                "Que locura, está buenísimo. <strong>Ya estoy haciendo mi primera web para un cliente.</strong> Nunca
+                pensé que podría hacer algo así sin saber programar."
+            </p>
+            <div class="proof-author">
+                <div class="proof-avatar">A</div>
+                <div>
+                    <div class="proof-name">Aquiles</div>
+                    <div class="proof-detail">Argentina ✓</div>
+                    <div class="stars">★★★★★</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- MODULES -->
+
+    <section>
+        <div class="section-tag reveal">Contenido</div>
+        <h2 class="reveal reveal-delay-1">Lo que vas a <span>aprender</span></h2>
+        <p style="font-size:14px;color:var(--muted);margin-bottom:20px;" class="reveal reveal-delay-1">5 módulos
+            directos. Sin relleno.</p>
+        <div class="modules">
+            <div class="module reveal reveal-delay-1">
+                <div class="module-left">
+                    <span class="module-num">01</span>
+                    <div class="module-text">
+                        <span class="module-title">Instalación y herramientas</span>
+                        <span class="module-desc">Todo lo que necesitas para empezar: herramientas, entorno y recursos
+                            listos.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="module reveal reveal-delay-2">
+                <div class="module-left">
+                    <span class="module-num">02</span>
+                    <div class="module-text">
+                        <span class="module-title">Requisitos del cliente</span>
+                        <span class="module-desc">Cómo leer lo que el cliente necesita y convertirlo en instrucciones
+                            claras para la IA.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="module reveal reveal-delay-3">
+                <div class="module-left">
+                    <span class="module-num">03</span>
+                    <div class="module-text">
+                        <span class="module-title">Tu primera web en un solo prompt</span>
+                        <span class="module-desc">Los fundamentos para crear webs con IA. Terminas el módulo con una web
+                            real. Parece magia.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="module reveal reveal-delay-4">
+                <div class="module-left">
+                    <span class="module-num">04</span>
+                    <div class="module-text">
+                        <span class="module-title">Webs que sí puedes cobrar</span>
+                        <span class="module-desc">Conviertes una web básica en algo profesional: cómo mejorarla, pulirla
+                            y darle un acabado real.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="module reveal reveal-delay-5">
+                <div class="module-left">
+                    <span class="module-num">05</span>
+                    <div class="module-text">
+                        <span class="module-title">Entrega la web al cliente</span>
+                        <span class="module-desc">De tu ordenador a un enlace real. Subes el código, publicas con Vercel
+                            y entregas algo profesional.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- FOR WHO -->
+
+    <section>
+        <div class="section-tag reveal">Para quién</div>
+        <h2 class="reveal reveal-delay-1">¿Esto es <span>para ti?</span></h2>
+        <div class="forwho-grid">
+            <div class="forwho-item reveal reveal-delay-1">
+                <div class="forwho-icon">🧑‍💻</div>
+                <div>
+                    <div class="forwho-title">Sin experiencia técnica</div>
+                    <div class="forwho-desc">No necesitas saber programar. El método está diseñado para empezar desde
+                        cero absoluto.</div>
+                </div>
+            </div>
+            <div class="forwho-item reveal reveal-delay-2">
+                <div class="forwho-icon">💼</div>
+                <div>
+                    <div class="forwho-title">Con trabajo o sin tiempo</div>
+                    <div class="forwho-desc">Puedes hacer una web en 10 minutos. No hace falta dedicarle horas cada día.
+                    </div>
+                </div>
+            </div>
+            <div class="forwho-item reveal reveal-delay-3">
+                <div class="forwho-icon">💸</div>
+                <div>
+                    <div class="forwho-title">Quieres un ingreso extra real</div>
+                    <div class="forwho-desc">Dos webs al mes son 400€. Esto no es un sueldo pasivo, es un servicio
+                        concreto con demanda real.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- AUTHOR -->
+
+    <section>
+        <div class="section-tag reveal">El creador</div>
+        <h2 class="reveal reveal-delay-1">Quién hay <span>detrás</span></h2>
+        <div class="author-card reveal reveal-delay-2">
+            <div class="author-header">
+                <div class="author-img">
+                    <img src="foto-humber.jpg" alt="Humberto" onerror="this.style.display='none'">
+                    H
+                </div>
+                <div>
+                    <div class="author-name">Humberto</div>
+                    <div class="author-handle">@humber.ia · Valencia</div>
+                </div>
+            </div>
+            <p class="author-bio">
+                Programador con 4 años de experiencia. Cuando vi lo que la IA podía hacer en desarrollo web lo empecé a
+                usar para crear webs para negocios locales. Este curso es exactamente lo que yo haría si empezara desde
+                cero: sin rodeos, sin fluff, solo el proceso real.
+            </p>
+            <div class="author-stats">
+                <div class="author-stat">
+                    <div class="author-stat-n">4+</div>
+                    <div class="author-stat-l">Años experiencia</div>
+                </div>
+                <div class="author-stat">
+                    <div class="author-stat-n">2k</div>
+                    <div class="author-stat-l">Seguidores</div>
+                </div>
+                <div class="author-stat">
+                    <div class="author-stat-n">✓</div>
+                    <div class="author-stat-l">Método probado</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- INCLUDES -->
+
+    <section>
+        <div class="section-tag reveal">Qué incluye</div>
+        <h2 class="reveal reveal-delay-1">Todo lo que <span>recibes</span></h2>
+        <div class="includes-grid">
+            <div class="include-item reveal reveal-delay-1">5 módulos en vídeo</div>
+            <div class="include-item reveal reveal-delay-2">Prompts listos</div>
+            <div class="include-item reveal reveal-delay-3">Soporte 7 días</div>
+            <div class="include-item reveal reveal-delay-4">Acceso de por vida</div>
+            <div class="include-item reveal reveal-delay-5">Actualizaciones</div>
+            <div class="include-item reveal reveal-delay-6">Método paso a paso</div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- PRICING -->
+
+    <section id="pricing">
+        <div class="section-tag reveal">Precio</div>
+        <h2 class="reveal reveal-delay-1">Empieza <span>hoy</span></h2>
+        <div class="pricing-card reveal reveal-delay-2">
+            <div class="pricing-badge">⚡ Precio de fundador</div>
+            <div class="pricing-price">
+                <div class="price-main">$30</div>
+                <div class="price-old">$97</div>
+            </div>
+            <p class="price-desc">Acceso inmediato a todo el contenido. Una sola web pagada ya cubre 10 veces el precio
+                del curso.</p>
+            <ul class="pricing-list">
+                <li>5 módulos completos en vídeo</li>
+                <li>Prompts y plantillas listas para usar</li>
+                <li>Soporte directo los primeros 7 días</li>
+                <li>Acceso de por vida + actualizaciones</li>
+            </ul>
+            <a href="https://buy.stripe.com/9B69ATd4I3gLgAlfPvao803" class="btn-buy" id="pricingCta">Acceder ahora por
+                $30 →</a>
+            <div class="guarantee">
+                <span class="guarantee-icon">🛡️</span>
+                <span>Si en 7 días no ves el valor, te devuelvo el dinero completo. Sin preguntas, sin formularios
+                    raros.</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- FAQ -->
+
+    <section>
+        <div class="section-tag reveal">Preguntas</div>
+        <h2 class="reveal reveal-delay-1">Dudas <span>frecuentes</span></h2>
+        <div class="faq">
+            <div class="faq-item reveal reveal-delay-1">
+                <button class="faq-q" id="faq1">¿Necesito saber programar?</button>
+                <div class="faq-a">No. El método está diseñado para personas sin conocimientos técnicos. La IA hace el
+                    trabajo pesado, tú solo das las instrucciones.</div>
+            </div>
+            <div class="faq-item reveal reveal-delay-2">
+                <button class="faq-q" id="faq2">¿Cuánto puedo ganar?</button>
+                <div class="faq-a">Una landing básica para un negocio local vale entre 150€ y 400€. Dependiendo del
+                    país.</div>
+            </div>
+            <div class="faq-item reveal reveal-delay-3">
+                <button class="faq-q" id="faq3">¿Cuánto tiempo necesito?</button>
+                <div class="faq-a">Puedes crear una web en 10 minutos. El curso lo puedes completar en un fin de semana
+                    y ya estar listo para ofrecer el servicio.</div>
+            </div>
+            <div class="faq-item reveal reveal-delay-4">
+                <button class="faq-q" id="faq4">¿Hay garantía de devolución?</button>
+                <div class="faq-a">Sí. Si en 7 días no ves el valor del curso, te devuelvo el dinero completo. Sin
+                    preguntas.</div>
+            </div>
+            <div class="faq-item reveal reveal-delay-5">
+                <button class="faq-q" id="faq5">¿El acceso es de por vida?</button>
+                <div class="faq-a">Sí. Pagas una vez y tienes acceso para siempre, incluyendo todas las actualizaciones
+                    futuras.</div>
+            </div>
+            <div class="faq-item reveal reveal-delay-6">
+                <button class="faq-q" id="faq6">¿Esto es suficiente para conseguir clientes?</button>
+                <div class="faq-a">El curso te da la habilidad técnica y el método de búsqueda. Conseguir clientes
+                    requiere que tú lo apliques: contactar negocios, mostrar el trabajo, cerrar. No es magia, pero el
+                    método es directo y funciona si lo ejecutas.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FLOATING CTA -->
+    <div class="floating-cta" id="floatingCta">
+        <span class="floating-cta-text"><s style="color:#3a3a44">$97</s> → <strong>$30</strong></span>
+        <a href="https://buy.stripe.com/9B69ATd4I3gLgAlfPvao803" class="floating-cta-btn">Acceder ahora →</a>
     </div>
-    <div class="stat">
-      <div class="stat-number" data-target="300" data-suffix="€">0</div>
-      <div class="stat-label">Precio medio</div>
-    </div>
-  </div>
-</div>
 
-<div class="section-divider"></div>
+    <footer>
+        <div class="footer-logo">humber<span>.ia</span></div>
+        <p class="footer-text">© 2026 · humber.ia · Valencia</p>
+    </footer>
 
-<!-- SHOWCASE -->
+    <script>
+        // ========== FAQ TOGGLE ==========
+        document.querySelectorAll('.faq-q').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.parentElement;
+                const isOpen = item.classList.contains('open');
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                if (!isOpen) item.classList.add('open');
+            });
+        });
 
-<section>
-  <div class="section-tag reveal">Ejemplos reales</div>
-  <h2 class="reveal reveal-delay-1">Webs hechas <span>con el método</span></h2>
-  <div class="showcase">
-    <div class="showcase-item reveal reveal-delay-2">
-      <img src="/web2.png" alt="Web profesional para clínica dental creada con IA" loading="lazy">
-      <div class="showcase-caption">
-        <span class="showcase-caption-text"><strong>Clínica dental</strong> · Valencia</span>
-        <span class="showcase-caption-tag">Hecha en 10 min</span>
-      </div>
-    </div>
-    <div class="showcase-item reveal reveal-delay-3">
-      <img src="/web1.png" alt="Web profesional para restaurante creada con IA" loading="lazy">
-      <div class="showcase-caption">
-        <span class="showcase-caption-text"><strong>Restaurante</strong> · Food & delivery</span>
-        <span class="showcase-caption-tag">Hecha en 10 min</span>
-      </div>
-    </div>
-  </div>
-</section>
+        // ========== SCROLL REVEAL (IntersectionObserver) ==========
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-<div class="section-divider"></div>
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-<!-- TESTIMONIAL -->
+        // ========== NAV SCROLL EFFECT ==========
+        const nav = document.getElementById('mainNav');
+        const floatingCta = document.getElementById('floatingCta');
 
-<section>
-  <div class="section-tag reveal">Lo que dicen</div>
-  <h2 class="reveal reveal-delay-1">Resultados <span>reales</span></h2>
-  <div class="proof reveal reveal-delay-2">
-    <p class="proof-text">
-      "Que locura, está buenísimo. <strong>Ya estoy haciendo mi primera web para un cliente.</strong> Nunca pensé que podría hacer algo así sin saber programar."
-    </p>
-    <div class="proof-author">
-      <div class="proof-avatar">A</div>
-      <div>
-        <div class="proof-name">Aquiles</div>
-        <div class="proof-detail">Primer cliente cerrado ✓</div>
-        <div class="stars">★★★★★</div>
-      </div>
-    </div>
-  </div>
-</section>
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
 
-<div class="section-divider"></div>
+            if (scrollY > 60) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
 
-<!-- HOW IT WORKS -->
+            if (scrollY > 600) {
+                floatingCta.classList.add('show');
+            } else {
+                floatingCta.classList.remove('show');
+            }
+        }, { passive: true });
 
-<section>
-  <div class="section-tag reveal">El método</div>
-  <h2 class="reveal reveal-delay-1">Así funciona <span>el proceso</span></h2>
-  <div class="steps">
-    <div class="step reveal reveal-delay-1">
-      <div class="step-num">01</div>
-      <div>
-        <div class="step-title">Buscás el negocio</div>
-        <div class="step-desc">Google Maps te da miles de negocios locales sin web. En 5 minutos tenés una lista de clientes potenciales.</div>
-      </div>
-    </div>
-    <div class="step reveal reveal-delay-2">
-      <div class="step-num">02</div>
-      <div>
-        <div class="step-title">La IA crea la web</div>
-        <div class="step-desc">Con el método y los prompts del curso, generás una web profesional completa en menos de 10 minutos. Sin tocar código.</div>
-      </div>
-    </div>
-    <div class="step reveal reveal-delay-3">
-      <div class="step-num">03</div>
-      <div>
-        <div class="step-title">Se la mostrás antes de cobrar</div>
-        <div class="step-desc">No vendés una promesa. Les enviás la web ya hecha. El impacto es inmediato y el cierre es natural.</div>
-      </div>
-    </div>
-    <div class="step reveal reveal-delay-4">
-      <div class="step-num">04</div>
-      <div>
-        <div class="step-title">Cobrás y repetís</div>
-        <div class="step-desc">150€ a 400€ por web. Con mantenimiento mensual podés tener ingresos recurrentes del mismo cliente.</div>
-      </div>
-    </div>
-  </div>
-</section>
+        // ========== ANIMATED STAT COUNTERS ==========
+        const statNumbers = document.querySelectorAll('.stat-number[data-target]');
+        let statsAnimated = false;
 
-<div class="section-divider"></div>
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !statsAnimated) {
+                    statsAnimated = true;
+                    animateCounters();
+                }
+            });
+        }, { threshold: 0.5 });
 
-<!-- MODULES -->
+        document.querySelector('.stats') && statsObserver.observe(document.querySelector('.stats'));
 
-<section>
-  <div class="section-tag reveal">Contenido</div>
-  <h2 class="reveal reveal-delay-1">Lo que vas a <span>aprender</span></h2>
-  <div class="modules">
-    <div class="module reveal reveal-delay-1">
-      <div class="module-left">
-        <span class="module-num">01</span>
-        <span class="module-title">Instalación y configuración del entorno</span>
-      </div>
-    </div>
-    <div class="module reveal reveal-delay-2">
-      <div class="module-left">
-        <span class="module-num">02</span>
-        <span class="module-title">Cómo encontrar clientes en Google Maps</span>
-      </div>
-      <span class="module-badge">Nuevo</span>
-    </div>
-    <div class="module reveal reveal-delay-3">
-      <div class="module-left">
-        <span class="module-num">03</span>
-        <span class="module-title">Crear webs profesionales con IA</span>
-      </div>
-    </div>
-    <div class="module reveal reveal-delay-4">
-      <div class="module-left">
-        <span class="module-num">04</span>
-        <span class="module-title">Mejorarlas a nivel pro</span>
-      </div>
-    </div>
-    <div class="module reveal reveal-delay-5">
-      <div class="module-left">
-        <span class="module-num">05</span>
-        <span class="module-title">Subir, deployar y entregar al cliente</span>
-      </div>
-    </div>
-    <div class="module reveal reveal-delay-6">
-      <div class="module-left">
-        <span class="module-num">06</span>
-        <span class="module-title">Cómo contactar y cerrar sin vender</span>
-      </div>
-      <span class="module-badge">Nuevo</span>
-    </div>
-  </div>
-</section>
+        function animateCounters() {
+            statNumbers.forEach(el => {
+                const target = parseInt(el.dataset.target);
+                const suffix = el.dataset.suffix || '';
+                const duration = 1200;
+                const startTime = performance.now();
 
-<div class="section-divider"></div>
+                function update(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    const current = Math.round(target * eased);
+                    el.textContent = current + suffix;
 
-<!-- FOR WHO -->
+                    if (progress < 1) {
+                        requestAnimationFrame(update);
+                    }
+                }
 
-<section>
-  <div class="section-tag reveal">Para quién</div>
-  <h2 class="reveal reveal-delay-1">¿Esto es <span>para vos?</span></h2>
-  <div class="forwho-grid">
-    <div class="forwho-item reveal reveal-delay-1">
-      <div class="forwho-icon">🧑‍💻</div>
-      <div>
-        <div class="forwho-title">Sin experiencia técnica</div>
-        <div class="forwho-desc">No necesitás saber programar. El método está diseñado para empezar desde cero absoluto.</div>
-      </div>
-    </div>
-    <div class="forwho-item reveal reveal-delay-2">
-      <div class="forwho-icon">💼</div>
-      <div>
-        <div class="forwho-title">Con trabajo o sin tiempo</div>
-        <div class="forwho-desc">Podés hacer una web en 10 minutos. No hace falta dedicarle horas cada día.</div>
-      </div>
-    </div>
-    <div class="forwho-item reveal reveal-delay-3">
-      <div class="forwho-icon">💸</div>
-      <div>
-        <div class="forwho-title">Querés un ingreso extra real</div>
-        <div class="forwho-desc">Dos webs al mes son 600€. Esto no es un sueldo pasivo, es un servicio concreto con demanda real.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- AUTHOR -->
-
-<section>
-  <div class="section-tag reveal">El creador</div>
-  <h2 class="reveal reveal-delay-1">Quién hay <span>detrás</span></h2>
-  <div class="author-card reveal reveal-delay-2">
-    <div class="author-header">
-      <div class="author-img">
-        <img src="/foto-humber.jpg" alt="Humberto" onerror="this.style.display='none'">
-        H
-      </div>
-      <div>
-        <div class="author-name">Humberto</div>
-        <div class="author-handle">@humber.ia · Valencia</div>
-      </div>
-    </div>
-    <p class="author-bio">
-      Programador con 4 años de experiencia. Cuando descubrí lo que la IA podía hacer con el desarrollo web, lo cambió todo. Empecé a crear webs para negocios locales en minutos, y decidí documentar el método exacto para que cualquiera pueda replicarlo.
-    </p>
-    <div class="author-stats">
-      <div class="author-stat">
-        <div class="author-stat-n">4+</div>
-        <div class="author-stat-l">Años experiencia</div>
-      </div>
-      <div class="author-stat">
-        <div class="author-stat-n">2k</div>
-        <div class="author-stat-l">Seguidores</div>
-      </div>
-      <div class="author-stat">
-        <div class="author-stat-n">✓</div>
-        <div class="author-stat-l">Método probado</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- INCLUDES -->
-
-<section>
-  <div class="section-tag reveal">Qué incluye</div>
-  <h2 class="reveal reveal-delay-1">Todo lo que <span>recibís</span></h2>
-  <div class="includes-grid">
-    <div class="include-item reveal reveal-delay-1">6 módulos en vídeo</div>
-    <div class="include-item reveal reveal-delay-2">Prompts listos</div>
-    <div class="include-item reveal reveal-delay-3">Soporte 7 días</div>
-    <div class="include-item reveal reveal-delay-4">Acceso de por vida</div>
-    <div class="include-item reveal reveal-delay-5">Actualizaciones</div>
-    <div class="include-item reveal reveal-delay-6">Método paso a paso</div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- PRICING -->
-
-<section id="pricing">
-  <div class="section-tag reveal">Precio</div>
-  <h2 class="reveal reveal-delay-1">Empezá <span>hoy</span></h2>
-  <div class="pricing-card reveal reveal-delay-2">
-    <div class="pricing-badge">⚡ Precio de fundador</div>
-    <div class="pricing-price">
-      <div class="price-main">$30</div>
-      <div class="price-old">$97</div>
-    </div>
-    <p class="price-desc">Acceso inmediato a todo el contenido. Una sola web pagada ya cubre 10 veces el precio del curso.</p>
-    <ul class="pricing-list">
-      <li>6 módulos completos en vídeo</li>
-      <li>Prompts y plantillas listas para usar</li>
-      <li>Soporte directo los primeros 7 días</li>
-      <li>Acceso de por vida + actualizaciones</li>
-    </ul>
-    <a href="https://buy.stripe.com/9B69ATd4I3gLgAlfPvao803" class="btn-buy" id="pricingCta">Acceder ahora por $30 →</a>
-    <div class="guarantee">
-      <span class="guarantee-icon">🛡️</span>
-      <span>Si en 7 días no ves el valor, te devuelvo el dinero. Sin preguntas.</span>
-    </div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- FAQ -->
-
-<section>
-  <div class="section-tag reveal">Preguntas</div>
-  <h2 class="reveal reveal-delay-1">Dudas <span>frecuentes</span></h2>
-  <div class="faq">
-    <div class="faq-item reveal reveal-delay-1">
-      <button class="faq-q" id="faq1">¿Necesito saber programar?</button>
-      <div class="faq-a">No. El método está diseñado para personas sin conocimientos técnicos. La IA hace el trabajo pesado, vos solo das las instrucciones.</div>
-    </div>
-    <div class="faq-item reveal reveal-delay-2">
-      <button class="faq-q" id="faq2">¿Cuánto puedo ganar?</button>
-      <div class="faq-a">Una landing básica para un negocio local vale entre 150€ y 400€. Con mantenimiento mensual, un solo cliente puede pagarte cada mes de forma recurrente.</div>
-    </div>
-    <div class="faq-item reveal reveal-delay-3">
-      <button class="faq-q" id="faq3">¿Cuánto tiempo necesito?</button>
-      <div class="faq-a">Podés crear una web en 10 minutos. El curso lo podés completar en un fin de semana y ya estar listo para ofrecer el servicio.</div>
-    </div>
-    <div class="faq-item reveal reveal-delay-4">
-      <button class="faq-q" id="faq4">¿Hay garantía de devolución?</button>
-      <div class="faq-a">Sí. Si en 7 días no ves el valor del curso, te devuelvo el dinero completo. Sin preguntas.</div>
-    </div>
-    <div class="faq-item reveal reveal-delay-5">
-      <button class="faq-q" id="faq5">¿El acceso es de por vida?</button>
-      <div class="faq-a">Sí. Pagás una vez y tenés acceso para siempre, incluyendo todas las actualizaciones futuras.</div>
-    </div>
-  </div>
-</section>
-
-<!-- FLOATING CTA -->
-<div class="floating-cta" id="floatingCta">
-  <span class="floating-cta-text"><s style="color:#3a3a44">$97</s> → <strong>$30</strong></span>
-  <a href="https://buy.stripe.com/9B69ATd4I3gLgAlfPvao803" class="floating-cta-btn">Acceder ahora →</a>
-</div>
-
-<footer>
-  <div class="footer-logo">humber<span>.ia</span></div>
-  <p class="footer-text">© 2026 · humber.ia · Valencia</p>
-</footer>
-
-<script>
-  // ========== FAQ TOGGLE ==========
-  document.querySelectorAll('.faq-q').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const item = btn.parentElement;
-      const isOpen = item.classList.contains('open');
-      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-      if (!isOpen) item.classList.add('open');
-    });
-  });
-
-  // ========== SCROLL REVEAL (IntersectionObserver) ==========
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-  // ========== NAV SCROLL EFFECT ==========
-  const nav = document.getElementById('mainNav');
-  const floatingCta = document.getElementById('floatingCta');
-
-  window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY;
-    
-    if (scrollY > 60) {
-      nav.classList.add('scrolled');
-    } else {
-      nav.classList.remove('scrolled');
-    }
-
-    if (scrollY > 600) {
-      floatingCta.classList.add('show');
-    } else {
-      floatingCta.classList.remove('show');
-    }
-  }, { passive: true });
-
-  // ========== ANIMATED STAT COUNTERS ==========
-  const statNumbers = document.querySelectorAll('.stat-number[data-target]');
-  let statsAnimated = false;
-
-  const statsObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !statsAnimated) {
-        statsAnimated = true;
-        animateCounters();
-      }
-    });
-  }, { threshold: 0.5 });
-
-  document.querySelector('.stats') && statsObserver.observe(document.querySelector('.stats'));
-
-  function animateCounters() {
-    statNumbers.forEach(el => {
-      const target = parseInt(el.dataset.target);
-      const suffix = el.dataset.suffix || '';
-      const duration = 1200;
-      const startTime = performance.now();
-
-      function update(currentTime) {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        const current = Math.round(target * eased);
-        el.textContent = current + suffix;
-        
-        if (progress < 1) {
-          requestAnimationFrame(update);
+                requestAnimationFrame(update);
+            });
         }
-      }
 
-      requestAnimationFrame(update);
-    });
-  }
+        // ========== FLOATING PARTICLES ==========
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 30;
+        const colors = ['#c8d93a', '#e8e8ec', '#a8b830', '#ffffff'];
 
-  // ========== FLOATING PARTICLES ==========
-  const particlesContainer = document.getElementById('particles');
-  const particleCount = 8;
-
-  for (let i = 0; i < particleCount; i++) {
-    const particle = document.createElement('div');
-    particle.className = 'particle';
-    particle.style.left = Math.random() * 100 + '%';
-    particle.style.width = (Math.random() * 2 + 1) + 'px';
-    particle.style.height = particle.style.width;
-    particle.style.animationDuration = (Math.random() * 12 + 10) + 's';
-    particle.style.animationDelay = (Math.random() * 10) + 's';
-    particle.style.opacity = 0;
-    particlesContainer.appendChild(particle);
-  }
-</script>
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            const size = (Math.random() * 3 + 1.5) + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.width = size;
+            particle.style.height = size;
+            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.setProperty('--particle-opacity', (Math.random() * 0.4 + 0.4).toFixed(2));
+            particle.style.animationDuration = (Math.random() * 14 + 8) + 's';
+            particle.style.animationDelay = (Math.random() * 12) + 's';
+            particlesContainer.appendChild(particle);
+        }
+    </script>
 
 </body>
+
 </html>
